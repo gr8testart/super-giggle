@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibertyPay | Mission Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <style>
+        :root {
+            --bg-color: #0d0f14;
+            --surface-1: #13161e;
+            --surface-2: #1a1e28;
+            --surface-3: #222736;
+            --border-color: #252a36;
+            --border-strong: #303748;
+            --accent-color: #f59e0b;
+            --accent-dim: rgba(245, 158, 11, 0.08);
+            --error-color: #f43f5e;
+            --error-dim: rgba(244, 63, 94, 0.08);
+            --success-color: #10b981;
+            --success-dim: rgba(16, 185, 129, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-dim: #64748b;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-secondary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Token Card */
+        #token-card {
+            background-color: var(--surface-1);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .token-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .token-value {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            background: var(--accent-dim);
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+            background-color: var(--surface-1);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.3s ease;
+        }
+
+        .panel:hover { border-color: var(--border-strong); }
+
+        .header { margin-bottom: 24px; }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: white;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+
+        .header p { font-size: 0.8rem; color: var(--text-dim); }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.connected { background: var(--success-dim); color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .status-badge.disconnected { background: var(--surface-2); color: var(--text-dim); border: 1px solid var(--border-color); }
+
+        .form-group { margin-bottom: 18px; }
+
+        .form-group label {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            background-color: var(--surface-2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: white;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        input.mono { font-family: var(--font-mono); }
+        input:focus { border-color: rgba(245, 158, 11, 0.5); box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2); }
+
+        .button-group { display: flex; flex-direction: column; gap: 12px; margin-top: auto; }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        button.primary { background-color: var(--accent-color); color: #0d0f14; }
+        button.primary:hover { background-color: #fbbf24; transform: translateY(-1px); }
+
+        button.danger { background-color: var(--error-dim); color: var(--error-color); border: 1px solid rgba(244, 63, 94, 0.2); }
+        button.danger:hover { background-color: rgba(244, 63, 94, 0.12); transform: translateY(-1px); }
+
+        button.outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); }
+        button.outline:hover { border-color: var(--border-strong); color: white; }
+
+        button:disabled { opacity: 0.3; cursor: not-allowed; transform: none !important; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Toast Styling */
+        .toastify {
+            background: var(--surface-1);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Token Display Card -->
+        <div id="token-card">
+            <span class="token-label">Active Session Token</span>
+            <span id="token-display" class="token-value">...</span>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Auth Panel -->
+            <div class="panel">
+                <div class="header">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h1>Mission Auth</h1>
+                        <span id="status-badge" class="status-badge disconnected">
+                            <span id="status-dot" style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--text-dim);"></span>
+                            <span id="status-text">Disconnected</span>
+                        </span>
+                    </div>
+                    <p>Initialize LibertyPay secure session</p>
+                </div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>Admin Email</label>
+                        <input type="email" id="email" value="whispakonnect@gmail.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Access Key</label>
+                        <input type="password" id="password" value="146704" class="mono" required>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" id="auth-btn" class="primary">⚡ Link Session</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="panel">
+                <div class="header">
+                    <h1>User Control</h1>
+                    <p>Execute sequence on target user</p>
+                </div>
+                <div class="form-group">
+                    <label>Target User ID</label>
+                    <input type="number" id="user_id" placeholder="000000" class="mono">
+                </div>
+                <div class="button-group">
+                    <button type="button" id="suspend-btn" class="danger">Abort User Access</button>
+                    <button type="button" id="unsuspend-btn" class="outline">Restore Access</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://backend.libertypayng.com';
+
+        const showToast = (msg, isError = false) => {
+            Toastify({
+                text: msg,
+                duration: 4000,
+                close: false,
+                gravity: "top",
+                position: "right",
+                style: {
+                    borderLeft: `4px solid ${isError ? '#f43f5e' : '#10b981'}`
+                }
+            }).showToast();
+        };
+
+        const updateStatus = (isConnected) => {
+            const badge = document.getElementById('status-badge');
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+            const tokenCard = document.getElementById('token-card');
+            const tokenDisplay = document.getElementById('token-display');
+
+            if (isConnected) {
+                badge.className = 'status-badge connected';
+                dot.style.backgroundColor = 'var(--success-color)';
+                dot.style.boxShadow = '0 0 8px var(--success-color)';
+                text.innerText = 'Connected';
+                
+                const token = localStorage.getItem('access_token');
+                if (token) {
+                    tokenCard.style.display = 'flex';
+                    tokenDisplay.innerText = `${token.substring(0, 5)}...${token.substring(token.length - 3)}`;
+                }
+            } else {
+                badge.className = 'status-badge disconnected';
+                dot.style.backgroundColor = 'var(--text-dim)';
+                dot.style.boxShadow = 'none';
+                text.innerText = 'Disconnected';
+                tokenCard.style.display = 'none';
+            }
+        };
+
+        // Check for existing token
+        if (localStorage.getItem('access_token')) {
+            updateStatus(true);
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('auth-btn');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            btn.disabled = true;
+            btn.innerText = 'Initializing...';
+
+            try {
+                const res = await axios.post(`${API_BASE}/user/login/create/`, {
+                    device_type: 'MOBILE',
+                    version: '1.0.0',
+                    email,
+                    password
+                });
+                
+                localStorage.setItem('access_token', res.data.access);
+                updateStatus(true);
+                showToast('Sequence Authenticated');
+            } catch (err) {
+                const msg = err.response?.data?.message || err.response?.data?.detail || 'Auth Failure';
+                showToast(msg, true);
+                updateStatus(false);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = '⚡ Link Session';
+            }
+        });
+
+        const handleAction = async (suspendValue) => {
+            const token = localStorage.getItem('access_token');
+            const userId = document.getElementById('user_id').value;
+            const btn = suspendValue ? document.getElementById('suspend-btn') : document.getElementById('unsuspend-btn');
+
+            if (!token) { return showToast('Initiate Admin Auth first', true); }
+            if (!userId) { return showToast('Target User ID required', true); }
+
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = 'Executing...';
+
+            try {
+                const res = await axios.post(`${API_BASE}/agency/others_suspend_user/`, {
+                    user_id: parseInt(userId),
+                    suspend: suspendValue,
+                    suspend_or_unsuspend_reason: '.'
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                // ONLY show what the server responds with
+                const msg = res.data?.message || res.data || (suspendValue ? 'User Suspended' : 'Access Restored');
+                showToast(msg);
+            } catch (err) {
+                if (err.response?.status === 401) {
+                    showToast('Session Expired', true);
+                    localStorage.removeItem('access_token');
+                    updateStatus(false);
+                } else {
+                    const msg = err.response?.data?.message || err.response?.data?.detail || 'Action Aborted';
+                    showToast(msg, true);
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        };
+
+        document.getElementById('suspend-btn').addEventListener('click', () => handleAction(true));
+        document.getElementById('unsuspend-btn').addEventListener('click', () => handleAction(false));
+    </script>
+</body>
+</html>
