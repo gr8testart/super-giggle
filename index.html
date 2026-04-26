@@ -46,7 +46,7 @@
 
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1200px;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -88,8 +88,13 @@
             gap: 20px;
         }
 
+        .full-width {
+            grid-column: span 2;
+        }
+
         @media (max-width: 768px) {
             .dashboard-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
         }
 
         .panel {
@@ -184,8 +189,8 @@
 
         button:disabled { opacity: 0.3; cursor: not-allowed; transform: none !important; }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -247,9 +252,51 @@
                     <label>Target User ID</label>
                     <input type="number" id="user_id" placeholder="000000" class="mono">
                 </div>
-                <div class="button-group">
+                <div class="button-group" style="gap: 10px;">
                     <button type="button" id="suspend-btn" class="danger">Abort User Access</button>
                     <button type="button" id="unsuspend-btn" class="outline">Restore Access</button>
+                </div>
+            </div>
+
+            <!-- Audit Panel -->
+            <div class="panel full-width">
+                <div class="header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h1>Account Audit</h1>
+                        <p>Scan complete ledger activity and balance history</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="email" id="audit_email" placeholder="user@example.com" class="mono" value="whispakonnect@gmail.com" style="width: 240px; margin-bottom: 0;">
+                        <button type="button" id="audit-btn" class="primary" style="width: auto; padding: 10px 20px;">⚡ SCAN LEDGER</button>
+                    </div>
+                </div>
+
+                <div id="audit-result" style="display: none; flex-direction: column; gap: 20px; animation: slideUp 0.4s ease-out;">
+                    <!-- Top Summary Card -->
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
+                        <div style="background: var(--surface-2); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center;">
+                            <span class="token-label" style="display: block; margin-bottom: 8px;">Net Position</span>
+                            <span id="balance-display" style="font-family: var(--font-mono); color: var(--success-color); font-size: 1.8rem; font-weight: 700;">₦0.00</span>
+                        </div>
+                        <div style="background: var(--surface-2); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+                            <span class="token-label" style="display: block; margin-bottom: 8px;">Latest Activity</span>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <p id="tx-type" style="color: white; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;"></p>
+                                    <p id="tx-narration" style="color: var(--text-dim); font-size: 0.75rem; font-style: italic;"></p>
+                                </div>
+                                <div id="tx-amount" style="font-family: var(--font-mono); font-weight: 600; font-size: 1rem; color: var(--text-primary);"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed History -->
+                    <div>
+                        <span class="token-label" style="display: block; margin-bottom: 12px;">Recent Sequences</span>
+                        <div id="tx-history" style="display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; padding-right: 8px;">
+                            <!-- Rows injected here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -374,6 +421,64 @@
 
         document.getElementById('suspend-btn').addEventListener('click', () => handleAction(true));
         document.getElementById('unsuspend-btn').addEventListener('click', () => handleAction(false));
+
+        // Audit Logic
+        document.getElementById('audit-btn').addEventListener('click', async () => {
+            const email = document.getElementById('audit_email').value;
+            const btn = document.getElementById('audit-btn');
+            const resultArea = document.getElementById('audit-result');
+            const historyArea = document.getElementById('tx-history');
+
+            if (!email) return showToast('Email required for audit', true);
+
+            btn.disabled = true;
+            btn.innerText = 'SCANNING...';
+
+            try {
+                const res = await axios.get(`${API_BASE}/accounts/check-transaction?email=${encodeURIComponent(email)}`);
+                const txs = res.data?.transaction || [];
+
+                if (txs.length > 0) {
+                    const latest = txs[0];
+                    document.getElementById('balance-display').innerText = `₦${latest.balance_after.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+                    document.getElementById('tx-type').innerText = `${latest.entry} — ${latest.transaction_type.replace(/_/g, ' ')}`;
+                    document.getElementById('tx-amount').innerText = `${latest.entry === 'CREDIT' ? '+' : '-'}₦${latest.amount.toLocaleString()}`;
+                    document.getElementById('tx-amount').style.color = latest.entry === 'CREDIT' ? 'var(--success-color)' : 'var(--error-color)';
+                    document.getElementById('tx-narration').innerText = `"${latest.narration}"`;
+                    
+                    // History
+                    historyArea.innerHTML = '';
+                    txs.slice(1).forEach(tx => {
+                        const row = document.createElement('div');
+                        row.style.cssText = 'background: var(--surface-2); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;';
+                        row.innerHTML = `
+                            <div>
+                                <p style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">${tx.transaction_type.replace(/_/g, ' ')}</p>
+                                <p style="font-size: 0.65rem; color: var(--text-dim);">${new Date(tx.date_created).toLocaleString()}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: ${tx.entry === 'CREDIT' ? 'var(--success-color)' : 'var(--error-color)'}">
+                                    ${tx.entry === 'CREDIT' ? '+' : '-'}₦${tx.amount.toLocaleString()}
+                                </p>
+                                <p style="font-size: 0.65rem; color: var(--text-dim);">Bal: ₦${tx.balance_after.toLocaleString()}</p>
+                            </div>
+                        `;
+                        historyArea.appendChild(row);
+                    });
+
+                    resultArea.style.display = 'flex';
+                    showToast('Ledger Scan Complete');
+                } else {
+                    showToast('No transactions found', true);
+                    resultArea.style.display = 'none';
+                }
+            } catch (err) {
+                showToast('Audit Failed', true);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = '⚡ SCAN LEDGER';
+            }
+        });
     </script>
 </body>
 </html>
