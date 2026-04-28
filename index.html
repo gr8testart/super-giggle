@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LibertyPay | Mission Control</title>
+    <title>Mission Control mv</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -30,7 +33,11 @@
             --font-mono: 'JetBrains Mono', monospace;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: var(--font-sans);
@@ -50,6 +57,54 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-color);
+            background: var(--accent-dim);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         /* Token Card */
@@ -93,8 +148,13 @@
         }
 
         @media (max-width: 768px) {
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .full-width { grid-column: span 1; }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: span 1;
+            }
         }
 
         .panel {
@@ -105,11 +165,17 @@
             display: flex;
             flex-direction: column;
             transition: border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .panel:hover { border-color: var(--border-strong); }
+        .panel:hover {
+            border-color: var(--border-strong);
+        }
 
-        .header { margin-bottom: 24px; }
+        .header {
+            margin-bottom: 24px;
+        }
 
         .header h1 {
             font-size: 1.4rem;
@@ -119,7 +185,10 @@
             margin-bottom: 4px;
         }
 
-        .header p { font-size: 0.8rem; color: var(--text-dim); }
+        .header p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
 
         .status-badge {
             display: inline-flex;
@@ -132,10 +201,21 @@
             text-transform: uppercase;
         }
 
-        .status-badge.connected { background: var(--success-dim); color: var(--success-color); border: 1px solid rgba(16, 185, 129, 0.2); }
-        .status-badge.disconnected { background: var(--surface-2); color: var(--text-dim); border: 1px solid var(--border-color); }
+        .status-badge.connected {
+            background: var(--success-dim);
+            color: var(--success-color);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
 
-        .form-group { margin-bottom: 18px; }
+        .status-badge.disconnected {
+            background: var(--surface-2);
+            color: var(--text-dim);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
 
         .form-group label {
             display: block;
@@ -147,7 +227,8 @@
             margin-bottom: 8px;
         }
 
-        input {
+        input,
+        select {
             width: 100%;
             background-color: var(--surface-2);
             border: 1px solid var(--border-color);
@@ -160,10 +241,28 @@
             outline: none;
         }
 
-        input.mono { font-family: var(--font-mono); }
-        input:focus { border-color: rgba(245, 158, 11, 0.5); box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2); }
+        select option {
+            background-color: var(--surface-2);
+            color: white;
+        }
 
-        .button-group { display: flex; flex-direction: column; gap: 12px; margin-top: auto; }
+        input.mono,
+        select.mono {
+            font-family: var(--font-mono);
+        }
+
+        input:focus,
+        select:focus {
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: auto;
+        }
 
         button {
             width: 100%;
@@ -176,127 +275,381 @@
             border: 1px solid transparent;
             text-transform: uppercase;
             letter-spacing: 0.025em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        button.primary { background-color: var(--accent-color); color: #0d0f14; }
-        button.primary:hover { background-color: #fbbf24; transform: translateY(-1px); }
+        button.primary {
+            background-color: var(--accent-color);
+            color: #0d0f14;
+        }
 
-        button.danger { background-color: var(--error-dim); color: var(--error-color); border: 1px solid rgba(244, 63, 94, 0.2); }
-        button.danger:hover { background-color: rgba(244, 63, 94, 0.12); transform: translateY(-1px); }
+        button.primary:hover {
+            background-color: #fbbf24;
+            transform: translateY(-1px);
+        }
 
-        button.outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); }
-        button.outline:hover { border-color: var(--border-strong); color: white; }
+        button.danger {
+            background-color: var(--error-dim);
+            color: var(--error-color);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
 
-        button:disabled { opacity: 0.3; cursor: not-allowed; transform: none !important; }
+        button.danger:hover {
+            background-color: rgba(244, 63, 94, 0.12);
+            transform: translateY(-1px);
+        }
+
+        button.outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        button.outline:hover {
+            border-color: var(--border-strong);
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+        }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Toast Styling */
-        .toastify {
-            background: var(--surface-1);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
-            font-family: var(--font-sans);
-            font-size: 0.85rem;
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-left-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Flare Line */
+        .flare-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            width: 0;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            transition: width 0.5s ease;
+        }
+
+        .panel.loading .flare-line {
+            animation: flare 2s infinite;
+            width: 100%;
+        }
+
+        @keyframes flare {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Search input specific */
+        .search-input {
+            margin-bottom: 8px;
+            border-style: dashed;
+            background-color: var(--surface-3);
+            font-size: 0.75rem;
+        }
+
+        /* Buddy List */
+        .buddy-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .buddy-item select {
+            flex: 2;
+        }
+
+        .buddy-item input {
+            flex: 1;
+        }
+
+        .buddy-item .remove-btn {
+            width: auto;
+            padding: 0 12px;
+            color: var(--error-color);
+            border-color: var(--error-dim);
         }
     </style>
 </head>
+
 <body>
     <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('main')">Dashboard</button>
+            <button class="tab-btn" onclick="switchTab('accounts')">Accounts</button>
+        </div>
+
         <!-- Token Display Card -->
         <div id="token-card">
             <span class="token-label">Active Session Token</span>
             <span id="token-display" class="token-value">...</span>
         </div>
 
-        <div class="dashboard-grid">
-            <!-- Auth Panel -->
-            <div class="panel">
-                <div class="header">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <h1>Mission Auth</h1>
-                        <span id="status-badge" class="status-badge disconnected">
-                            <span id="status-dot" style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--text-dim);"></span>
-                            <span id="status-text">Disconnected</span>
-                        </span>
-                    </div>
-                    <p>Initialize LibertyPay secure session</p>
-                </div>
-                <form id="login-form">
-                    <div class="form-group">
-                        <label>Admin Email</label>
-                        <input type="email" id="email" value="whispakonnect@gmail.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Access Key</label>
-                        <input type="password" id="password" value="146704" class="mono" required>
-                    </div>
-                    <div class="button-group">
-                        <button type="submit" id="auth-btn" class="primary">⚡ Link Session</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Control Panel -->
-            <div class="panel">
-                <div class="header">
-                    <h1>User Control</h1>
-                    <p>Execute sequence on target user</p>
-                </div>
-                <div class="form-group">
-                    <label>Target User ID</label>
-                    <input type="number" id="user_id" placeholder="000000" class="mono">
-                </div>
-                <div class="button-group" style="gap: 10px;">
-                    <button type="button" id="suspend-btn" class="danger">Abort User Access</button>
-                    <button type="button" id="unsuspend-btn" class="outline">Restore Access</button>
-                </div>
-            </div>
-
-            <!-- Audit Panel -->
-            <div class="panel full-width">
-                <div class="header" style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div>
-                        <h1>Account Audit</h1>
-                        <p>Scan complete ledger activity and balance history</p>
-                    </div>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <input type="email" id="audit_email" placeholder="user@example.com" class="mono" value="whispakonnect@gmail.com" style="width: 240px; margin-bottom: 0;">
-                        <button type="button" id="audit-btn" class="primary" style="width: auto; padding: 10px 20px;">⚡ SCAN LEDGER</button>
-                    </div>
-                </div>
-
-                <div id="audit-result" style="display: none; flex-direction: column; gap: 20px; animation: slideUp 0.4s ease-out;">
-                    <!-- Top Summary Card -->
-                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
-                        <div style="background: var(--surface-2); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center;">
-                            <span class="token-label" style="display: block; margin-bottom: 8px;">Net Position</span>
-                            <span id="balance-display" style="font-family: var(--font-mono); color: var(--success-color); font-size: 1.8rem; font-weight: 700;">₦0.00</span>
+        <!-- MAIN DASHBOARD -->
+        <div id="tab-main" class="tab-content active">
+            <div class="dashboard-grid">
+                <!-- Auth Panel -->
+                <div class="panel" id="panel-auth">
+                    <div class="header">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <h1>Mission Auth</h1>
+                            <span id="status-badge" class="status-badge disconnected">
+                                <span id="status-dot"
+                                    style="width: 6px; height: 6px; border-radius: 50%; background-color: var(--text-dim);"></span>
+                                <span id="status-text">Disconnected</span>
+                            </span>
                         </div>
-                        <div style="background: var(--surface-2); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-                            <span class="token-label" style="display: block; margin-bottom: 8px;">Latest Activity</span>
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                <div>
-                                    <p id="tx-type" style="color: white; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;"></p>
-                                    <p id="tx-narration" style="color: var(--text-dim); font-size: 0.75rem; font-style: italic;"></p>
+                        <p>Initialize LibertyPay secure session</p>
+                    </div>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label>Admin Email</label>
+                            <input type="email" id="email" value="whispakonnect@gmail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Access Key</label>
+                            <input type="password" id="password" value="146704" class="mono" required>
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" id="auth-btn" class="primary">
+                                <span class="spinner" id="auth-spinner"></span>
+                                <span class="btn-text">⚡ Link Session</span>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="flare-line"></div>
+                </div>
+
+                <!-- Control Panel -->
+                <div class="panel" id="panel-control">
+                    <div class="header">
+                        <h1>User Control</h1>
+                        <p>Execute sequence on target user</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Target User ID</label>
+                        <input type="number" id="user_id" placeholder="000000" class="mono">
+                    </div>
+                    <div class="button-group" style="gap: 10px;">
+                        <button type="button" id="suspend-btn" class="danger">
+                            <span class="spinner"></span>
+                            <span>Abort User Access</span>
+                        </button>
+                        <button type="button" id="unsuspend-btn" class="outline">
+                            <span class="spinner"></span>
+                            <span>Restore Access</span>
+                        </button>
+                    </div>
+                    <div class="flare-line"></div>
+                </div>
+
+                <!-- Audit Panel -->
+                <div class="panel full-width" id="panel-audit">
+                    <div class="header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h1>Account Audit</h1>
+                            <p>Scan complete ledger activity and balance history</p>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="email" id="audit_email" placeholder="user@example.com" class="mono"
+                                value="whispakonnect@gmail.com" style="width: 240px; margin-bottom: 0;">
+                            <button type="button" id="audit-btn" class="primary"
+                                style="width: auto; padding: 10px 20px;">
+                                <span class="spinner" id="audit-spinner"></span>
+                                <span>⚡ SCAN LEDGER</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="audit-result"
+                        style="display: none; flex-direction: column; gap: 20px; animation: slideUp 0.4s ease-out;">
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
+                            <div
+                                style="background: var(--surface-2); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: center;">
+                                <span class="token-label" style="display: block; margin-bottom: 8px;">Net
+                                    Position</span>
+                                <span id="balance-display"
+                                    style="font-family: var(--font-mono); color: var(--success-color); font-size: 1.8rem; font-weight: 700;">₦0.00</span>
+                            </div>
+                            <div
+                                style="background: var(--surface-2); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+                                <span class="token-label" style="display: block; margin-bottom: 8px;">Latest
+                                    Activity</span>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div>
+                                        <p id="tx-type"
+                                            style="color: white; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;">
+                                        </p>
+                                        <p id="tx-narration"
+                                            style="color: var(--text-dim); font-size: 0.75rem; font-style: italic;"></p>
+                                    </div>
+                                    <div id="tx-amount"
+                                        style="font-family: var(--font-mono); font-weight: 600; font-size: 1rem; color: var(--text-primary);">
+                                    </div>
                                 </div>
-                                <div id="tx-amount" style="font-family: var(--font-mono); font-weight: 600; font-size: 1rem; color: var(--text-primary);"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="token-label" style="display: block; margin-bottom: 12px;">Recent
+                                Sequences</span>
+                            <div id="tx-history"
+                                style="display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; padding-right: 8px;">
                             </div>
                         </div>
                     </div>
+                    <div class="flare-line"></div>
+                </div>
+            </div>
+        </div>
 
-                    <!-- Detailed History -->
-                    <div>
-                        <span class="token-label" style="display: block; margin-bottom: 12px;">Recent Sequences</span>
-                        <div id="tx-history" style="display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; padding-right: 8px;">
-                            <!-- Rows injected here -->
+        <!-- ACCOUNTS WINDOW -->
+        <div id="tab-accounts" class="tab-content">
+            <div class="dashboard-grid">
+                <!-- Check Balance Card -->
+                <div class="panel" id="panel-check-balance">
+                    <div class="header">
+                        <h1>Check Balance</h1>
+                        <p>Select account to query mainframe</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Account</label>
+                        <select id="balance_account_select" class="mono"></select>
+                    </div>
+                    <div id="balance_query_result"
+                        style="display: none; margin-bottom: 20px; animation: slideUp 0.3s ease;">
+                        <div
+                            style="background: var(--surface-2); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color);">
+                            <span class="token-label">Withdrawable Balance</span>
+                            <p id="acc-balance-display"
+                                style="font-family: var(--font-mono); color: var(--success-color); font-size: 1.4rem; font-weight: 700; margin-top: 4px;">
+                                ₦0.00</p>
                         </div>
                     </div>
+                    <div class="button-group">
+                        <button type="button" id="check-balance-btn" class="primary">
+                            <span class="spinner"></span>
+                            <span>🔍 Fetch Balance</span>
+                        </button>
+                    </div>
+                    <div class="flare-line"></div>
+                </div>
+
+                <!-- Send Money Buddy Card -->
+                <div class="panel" id="panel-buddy">
+                    <div class="header">
+                        <h1>Send Money Buddy</h1>
+                        <p>Internal distribution from Main Account</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Source Account (Main)</label>
+                        <select id="buddy_source_select" class="mono" disabled></select>
+                    </div>
+                    <div id="buddy-receivers-list" style="margin-bottom: 15px;">
+                        <!-- Dynamic items here -->
+                    </div>
+                    <div class="button-group" style="gap: 10px;">
+                        <button type="button" id="add-buddy-item-btn" class="outline" style="font-size: 0.7rem;">+ Add
+                            Receiver</button>
+                        <button type="button" id="send-buddy-btn" class="primary">
+                            <span class="spinner"></span>
+                            <span>⚡ Distribute Funds</span>
+                        </button>
+                    </div>
+                    <div class="flare-line"></div>
+                </div>
+
+                <!-- Send Money External Card -->
+                <div class="panel full-width" id="panel-external">
+                    <div class="header">
+                        <h1>Send Money External</h1>
+                        <p>Transfer to external banking institutions</p>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        <div>
+                            <div class="form-group">
+                                <label>Source Account</label>
+                                <select id="ext_source_select" class="mono"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Transfer Amount</label>
+                                <input type="number" id="ext_amount" placeholder="0.00" class="mono">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label>Destination Bank</label>
+                                <input type="text" id="bank_search" placeholder="Search bank name..."
+                                    class="search-input">
+                                <select id="ext_bank_select" class="mono">
+                                    <option value="">Select Institution...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Account Number</label>
+                                <input type="text" id="ext_account_number" placeholder="10 Digits" class="mono"
+                                    maxlength="10">
+                            </div>
+                            <p id="resolved_account_name"
+                                style="font-size: 0.75rem; color: var(--success-color); margin-top: -12px; margin-bottom: 12px; min-height: 1rem;">
+                            </p>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button type="button" id="send-ext-btn" class="primary" disabled>
+                            <span class="spinner"></span>
+                            <span>⚡ Execute External Transfer</span>
+                        </button>
+                    </div>
+                    <div class="flare-line"></div>
                 </div>
             </div>
         </div>
@@ -305,6 +658,566 @@
     <script>
         const API_BASE = 'https://backend.libertypayng.com';
 
+        const accounts = [
+            { email: "adewunmiadeyemi427@ves.ink", phone: "2349112817330", passcode: "096321", pin: "2248", id: "8974", isMain: false, canTransferOut: true, isBuddyReceiver: true },
+            { email: "olawunmijulius@ves.ink", phone: "2348150549479", passcode: "096321", pin: "0011", id: "2763", isMain: false, canTransferOut: true, isBuddyReceiver: true },
+            { email: "aminutitilayo087@cloudsign.in", phone: "2349131899278", passcode: "096321", pin: "5050", id: "8970", isMain: false, canTransferOut: true, isBuddyReceiver: true },
+            { email: "saheedatmaleek@assurmail.net", phone: "2347081757438", passcode: "096321", pin: "2085", id: "9922", isMain: false, canTransferOut: true, isBuddyReceiver: true },
+            { email: "sosanolunurudeen981@jetable.org", phone: "2348166044577", passcode: "096321", pin: "1929", id: "11691", isMain: false, canTransferOut: true, isBuddyReceiver: true },
+            { email: "whispakonnect@gmail.com", phone: "2348166044577", passcode: "146704", pin: "0211", id: "11691_main", isMain: true, canTransferOut: false, isBuddyReceiver: false }
+        ];
+
+        const banklist = [
+            { "bank_code": "090424", "name": "ABUCOOP MICROFINANCE BANK" },
+            { "bank_code": "100052", "name": "Access Yelo & Beta" },
+            { "bank_code": "100013", "name": "ACCESSMONEY" },
+            { "bank_code": "090134", "name": "ACCION MFB" },
+            { "bank_code": "090483", "name": "ADA MFB" },
+            { "bank_code": "090160", "name": "ADDOSSER MFBB" },
+            { "bank_code": "090268", "name": "ADEYEMI COLLEGE STAFF MICROFINANCE BANK" },
+            { "bank_code": "090759", "name": "ADVANCLY" },
+            { "bank_code": "090155", "name": "ADVANS LAFAYETTE MFB" },
+            { "bank_code": "090292", "name": "Afekhafe MFB" },
+            { "bank_code": "100028", "name": "AG MORTGAGE BANK PLC" },
+            { "bank_code": "090371", "name": "AGOSASA MICROFINANCE BANK" },
+            { "bank_code": "110072", "name": "78 FINANCE COMPANY LTD" },
+            { "bank_code": "120001", "name": "9 payment service Bank" },
+            { "bank_code": "090629", "name": "9JAPAY MICROFINANCE BANK" },
+            { "bank_code": "050005", "name": "AAA FINANCE" },
+            { "bank_code": "090270", "name": "AB MICROFINANCE BANK" },
+            { "bank_code": "090260", "name": "ABOVE ONLY MICROFINANCE BANK" },
+            { "bank_code": "090640", "name": "ABSU MFB" },
+            { "bank_code": "090197", "name": "ABU MICROFINANCE BANK" },
+            { "bank_code": "090698", "name": "AKALABO MFB" },
+            { "bank_code": "090608", "name": "Akpo Microfinance Bank" },
+            { "bank_code": "090531", "name": "Aku MFB" },
+            { "bank_code": "90133", "name": "AL-BARAKAH MFB" },
+            { "bank_code": "090133", "name": "AL-BARKAH MFB" },
+            { "bank_code": "090259", "name": "ALEKUN MICROFINANCE BANK" },
+            { "bank_code": "090297", "name": "ALERT MFB" },
+            { "bank_code": "090277", "name": "ALHAYAT MFB" },
+            { "bank_code": "090548", "name": "ALLY MFB" },
+            { "bank_code": "090672", "name": "BELLBANK MFB" },
+            { "bank_code": "090618", "name": "BERACHAH MICROFINANCE BANK" },
+            { "bank_code": "090615", "name": "Beststar MFB" },
+            { "bank_code": "090683", "name": "BETHEL MFB" },
+            { "bank_code": "090395", "name": "Borgu MFB" },
+            { "bank_code": "090189", "name": "ESAN MFB" },
+            { "bank_code": "090166", "name": "ESO-E MICROFINANCE BANK" },
+            { "bank_code": "100006", "name": "ETRANZACT" },
+            { "bank_code": "090304", "name": "EVANGEL MFB" },
+            { "bank_code": "090332", "name": "EVERGREEN MICROFINANCE BANK" },
+            { "bank_code": "090572", "name": "EWT Microfinance Bank" },
+            { "bank_code": "090678", "name": "EXCEL MICROFINANCE BANK" },
+            { "bank_code": "090541", "name": "EXCELLENT MFB" },
+            { "bank_code": "090115", "name": "IBANK MFB" },
+            { "bank_code": "090697", "name": "IBBU MFB" },
+            { "bank_code": "090725", "name": "IHIALA MFB" },
+            { "bank_code": "090279", "name": "Ikire MFB" },
+            { "bank_code": "090681", "name": "IKOYI ILE MFB" },
+            { "bank_code": "090571", "name": "ILARO POLY MICROFINANCE BANK LTD" },
+            { "bank_code": "090370", "name": "ILASAN MICROFINANCE BANK" },
+            { "bank_code": "090710", "name": "ILE-OLUJI MFB" },
+            { "bank_code": "090037", "name": "ILISAN-MFB" },
+            { "bank_code": "090430", "name": "ILORA MFB" },
+            { "bank_code": "090607", "name": "MINJIBIR MICROFINANCE BANK" },
+            { "bank_code": "090281", "name": "MINT-FINEX MFB" },
+            { "bank_code": "090455", "name": "MKOBO MFB" },
+            { "bank_code": "100011", "name": "Mkudi" },
+            { "bank_code": "090362", "name": "MOLUSI MICROFINANCE BANK" },
+            { "bank_code": "120003", "name": "MoMo PSB" },
+            { "bank_code": "100020", "name": "MoneyBox" },
+            { "bank_code": "090144", "name": "MONEYFIELD MFB" },
+            { "bank_code": "120005", "name": "MoneyMaster PSB" },
+            { "bank_code": "090129", "name": "MONEYTRUST MFB" },
+            { "bank_code": "090405", "name": "Moniepoint MFB" },
+            { "bank_code": "090392", "name": "MOZFIN MFB" },
+            { "bank_code": "070028", "name": "MUTUAL ALLIANCE MORTGAGE BANK" },
+            { "bank_code": "090190", "name": "MUTUAL BENEFITS MFB" },
+            { "bank_code": "090151", "name": "MUTUAL TRUST MICROFINANCE BANK" },
+            { "bank_code": "090740", "name": "NAF MFB" },
+            { "bank_code": "110001", "name": "PayAttitude Online" },
+            { "bank_code": "100039", "name": "PAYSTACK-TITAN" },
+            { "bank_code": "090402", "name": "PEACE MFB" },
+            { "bank_code": "090137", "name": "Pecan Trust Microfinance Bank" },
+            { "bank_code": "090196", "name": "PENNYWISE MICROFINANCE BANK" },
+            { "bank_code": "090135", "name": "Personal Trust Microfinance Bank" },
+            { "bank_code": "090165", "name": "PETRA MICROFINANCE BANK" },
+            { "bank_code": "050021", "name": "PFI FINANCE COMPANY LIMITED" },
+            { "bank_code": "090289", "name": "PILLAR MFB" },
+            { "bank_code": "100042", "name": "POCKETAPP" },
+            { "bank_code": "090534", "name": "POLYIBADAN MFB" },
+            { "bank_code": "090412", "name": "Preeminent Microfinance Bank" },
+            { "bank_code": "000031", "name": "Premium Trust Bank" },
+            { "bank_code": "090714", "name": "TOFA MFB" },
+            { "bank_code": "090682", "name": "BUYPOWER MFB" },
+            { "bank_code": "090663", "name": "TREASURES MICROFINANCE BANK" },
+            { "bank_code": "090146", "name": "TRIDENT MICROFINANCE BANK" },
+            { "bank_code": "050014", "name": "TRINITY FINANCIAL SERVICES LIMITED" },
+            { "bank_code": "050023", "name": "TRIVES FINANCE COMPANY LTD" },
+            { "bank_code": "090327", "name": "TRUST MFB" },
+            { "bank_code": "090123", "name": "Trustbanc J6 MFB" },
+            { "bank_code": "090005", "name": "Trustbond" },
+            { "bank_code": "090276", "name": "TRUSTFUND MICROFINANCE BANK" },
+            { "bank_code": "090315", "name": "U AND C MFB" },
+            { "bank_code": "000004", "name": "UBA" },
+            { "bank_code": "000040", "name": "UBA MONI" },
+            { "bank_code": "090762", "name": "UBJ MFB" },
+            { "bank_code": "100026", "name": "Carbon" },
+            { "bank_code": "090781", "name": "Ultraviolet MFB" },
+            { "bank_code": "090609", "name": "Ummah Microfinance Bank" },
+            { "bank_code": "090514", "name": "UMUCHINEMERE PROCREDIT MFB" },
+            { "bank_code": "090652", "name": "UMUCHUKWU MFB " },
+            { "bank_code": "090510", "name": "UMUNNACHI MFB" },
+            { "bank_code": "090331", "name": "UNAAB MFB" },
+            { "bank_code": "090461", "name": "UNIBADAN MFB" },
+            { "bank_code": "090266", "name": "UNIBEN MICROFINANCE BANK" },
+            { "bank_code": "090141", "name": "Chikum Microfinance Bank" },
+            { "bank_code": "090637", "name": "Unifund Microfinance Bank" },
+            { "bank_code": "090341", "name": "UNIILORIN MFB" },
+            { "bank_code": "000018", "name": "UNION BANK" },
+            { "bank_code": "090560", "name": "CRUST MICROFINANCE BANK" },
+            { "bank_code": "090338", "name": "UNIUYO MICROFINANCE BANK" },
+            { "bank_code": "090251", "name": "UNN MFB" },
+            { "bank_code": "090719", "name": "UNUBI MFB" },
+            { "bank_code": "090619", "name": "URE MFB" },
+            { "bank_code": "090765", "name": "UVUOMA MFB" },
+            { "bank_code": "090164", "name": "FIRST ROYAL MICROFINANCE BANK" },
+            { "bank_code": "999999", "name": "VFD MICROFINANCE BANK" },
+            { "bank_code": "090150", "name": "Virtue MFB" },
+            { "bank_code": "100012", "name": "VTNETWORKS" },
+            { "bank_code": "090131", "name": "ALLWORKERS MFB" },
+            { "bank_code": "090169", "name": "Alphakapital MFB" },
+            { "bank_code": "000037", "name": "ALTERNATIVE BANK LIMITED" },
+            { "bank_code": "090394", "name": "Amac Microfinance Bank" },
+            { "bank_code": "090180", "name": "AMJU MFB" },
+            { "bank_code": "090116", "name": "AMML MFB" },
+            { "bank_code": "090610", "name": "AMOYE MFB" },
+            { "bank_code": "090770", "name": "AMPLE MFB" },
+            { "bank_code": "090143", "name": "APEKS MICROFINANCE BANK" },
+            { "bank_code": "090376", "name": "APPLE  MICROFINANCE BANK" },
+            { "bank_code": "090282", "name": "Arise MFB" },
+            { "bank_code": "090001", "name": "ASOSAVINGS" },
+            { "bank_code": "090287", "name": "Assets Matrix MFB" },
+            { "bank_code": "090473", "name": "ASSETS MFB" },
+            { "bank_code": "090172", "name": "Astrapolis MFB" },
+            { "bank_code": "090264", "name": "AUCHI MICROFINANCE BANK" },
+            { "bank_code": "090600", "name": "AVE MARIA MICROFINANCE BANK LTD" },
+            { "bank_code": "090478", "name": "AVUENEGBE MFB" },
+            { "bank_code": "090729", "name": "BABCOCK MFB" },
+            { "bank_code": "090625", "name": "Babura Microfinance Bank" },
+            { "bank_code": "090188", "name": "BAINES CREDIT MFB" },
+            { "bank_code": "090651", "name": "BAM MFB" },
+            { "bank_code": "090581", "name": "Banc Corp MFB" },
+            { "bank_code": "090425", "name": "Banex MFB" },
+            { "bank_code": "090275", "name": "Bankit MFB" },
+            { "bank_code": "090136", "name": "BAOBAB MFB" },
+            { "bank_code": "090316", "name": "BAYERO MICROFINANCE BANK" },
+            { "bank_code": "090127", "name": "BC Kash MFB" },
+            { "bank_code": "070010", "name": "ABBEY MORTGAGE BANK" },
+            { "bank_code": "000014", "name": "ACCESS BANK" },
+            { "bank_code": "000005", "name": "Access Bank (Diamond)" },
+            { "bank_code": "090614", "name": "Aella MFB" },
+            { "bank_code": "090633", "name": "Awacash Microfinance Bank" },
+            { "bank_code": "090529", "name": "BANKLY MFB" },
+            { "bank_code": "090743", "name": "BLOOMS MFB" },
+            { "bank_code": "090431", "name": "BLUEWHALES MFB" },
+            { "bank_code": "090117", "name": "Boctrust Microfinance Bank" },
+            { "bank_code": "090703", "name": "Bokkos MFB" },
+            { "bank_code": "090319", "name": "BONGHE MFB" },
+            { "bank_code": "090501", "name": "Boromu MFB" },
+            { "bank_code": "090454", "name": "BORSTAL MFB" },
+            { "bank_code": "090176", "name": "Bosak MFB" },
+            { "bank_code": "090148", "name": "Bowen MFB" },
+            { "bank_code": "050006", "name": "Branch International Company Limited" },
+            { "bank_code": "070015", "name": "Brent Mortgage Bank" },
+            { "bank_code": "090293", "name": "Brethren MFB" },
+            { "bank_code": "090393", "name": "Bridgeway Microfinance Bank" },
+            { "bank_code": "090636", "name": "Briyth Covenant Microfinance Bank" },
+            { "bank_code": "090568", "name": "BROADVIEW MICROFINANCE BANK LTD" },
+            { "bank_code": "090613", "name": "BUILD MICROFINANCE BANK" },
+            { "bank_code": "090661", "name": "BUNDI MFB" },
+            { "bank_code": "090655", "name": "Bunkure MFB" },
+            { "bank_code": "090406", "name": "Business Support Microfinance Bank" },
+            { "bank_code": "090415", "name": "Calabar Microfinance Bank" },
+            { "bank_code": "090647", "name": "CANAAN MFB" },
+            { "bank_code": "090509", "name": "CAPITALMETRIQ SWIFT MFB" },
+            { "bank_code": "090445", "name": "CAPSTONE MFB" },
+            { "bank_code": "050017", "name": "CARDINALSTONE FINANCE" },
+            { "bank_code": "090634", "name": "CASHBRIDGE MICROFINANCE BANK" },
+            { "bank_code": "090360", "name": "CashConnect MFB" },
+            { "bank_code": "090649", "name": "Cashrite MFB" },
+            { "bank_code": "090498", "name": "Catland Microfinance Bank" },
+            { "bank_code": "090154", "name": "CEMCS MFB" },
+            { "bank_code": "000028", "name": "Central Bank of Nigeria" },
+            { "bank_code": "050032", "name": "CENTRUM FINANCE" },
+            { "bank_code": "090397", "name": "Chanelle Bank" },
+            { "bank_code": "090523", "name": "CHASE MFB" },
+            { "bank_code": "090440", "name": "CHERISH MFB" },
+            { "bank_code": "090416", "name": "CHIBUEZE MFB" },
+            { "bank_code": "000009", "name": "CITI BANK" },
+            { "bank_code": "070027", "name": "CITYCODE MORTGAGE BANK" },
+            { "bank_code": "090482", "name": "Clearpay MFB" },
+            { "bank_code": "090374", "name": "COASTLINE MICROFINANCE BANK" },
+            { "bank_code": "090530", "name": "CONFIDENCE MFB" },
+            { "bank_code": "090553", "name": "CONSISTENT TRUST MFB" },
+            { "bank_code": "090130", "name": "CONSUMER  MFB" },
+            { "bank_code": "070021", "name": "COOP Mortgage Bank" },
+            { "bank_code": "090717", "name": "COOPFUND MFB" },
+            { "bank_code": "060001", "name": "CORONATION" },
+            { "bank_code": "050001", "name": "COUNTY FINANCE" },
+            { "bank_code": "070006", "name": "COVENANT MFB" },
+            { "bank_code": "090159", "name": "CREDIT AFRIQUE MFB" },
+            { "bank_code": "110049", "name": "Credit Direct Ltd" },
+            { "bank_code": "090611", "name": "Creditville MFB" },
+            { "bank_code": "090429", "name": "CROSS RIVER MFB" },
+            { "bank_code": "090414", "name": "CRUTECH MFB" },
+            { "bank_code": "090686", "name": "CSD MICROFINANCE BANK" },
+            { "bank_code": "090705", "name": "DAILY TRUST MFB" },
+            { "bank_code": "090596", "name": "DAL Microfinance Bank" },
+            { "bank_code": "090673", "name": "DAVENPORT MFB" },
+            { "bank_code": "090391", "name": "Davodani  Microfinance Bank" },
+            { "bank_code": "090167", "name": "Daylight Microfinance Bank" },
+            { "bank_code": "070023", "name": "DELTA TRUST MORTGAGE BANK" },
+            { "bank_code": "090723", "name": "DESTINY MFB" },
+            { "bank_code": "050013", "name": "Dignity Finance" },
+            { "bank_code": "090643", "name": "DIOBU MICROFINANCE BANK" },
+            { "bank_code": "090404", "name": "DOJE Microfinance Bank" },
+            { "bank_code": "090470", "name": "DOT MICROFINANCE BANK LIMITED" },
+            { "bank_code": "090156", "name": "E-BARCS MFB" },
+            { "bank_code": "050016", "name": "E-Finance" },
+            { "bank_code": "090674", "name": "Earnwell MICROFINANCE BANK" },
+            { "bank_code": "100021", "name": "Eartholeum" },
+            { "bank_code": "000010", "name": "ECOBANK" },
+            { "bank_code": "100008", "name": "ECOBANK XPRESS ACCOUNT" },
+            { "bank_code": "090694", "name": "EJINDU MFB" },
+            { "bank_code": "090389", "name": "EK-Reliable Microfinance Bank" },
+            { "bank_code": "090097", "name": "Ekondo MFB" },
+            { "bank_code": "090712", "name": "Emaar" },
+            { "bank_code": "090273", "name": "EMERALDS MFB" },
+            { "bank_code": "090114", "name": "EmpireTrust Microfinance bank" },
+            { "bank_code": "050012", "name": "Enco Finance" },
+            { "bank_code": "000019", "name": "Enterprise Bank" },
+            { "bank_code": "090656", "name": "ENTITY MICROFINANCE BANK" },
+            { "bank_code": "090328", "name": "Eyowo MFB" },
+            { "bank_code": "090551", "name": "FAIRMONEY MFB" },
+            { "bank_code": "090330", "name": "Fame MFB" },
+            { "bank_code": "050009", "name": "FAST CREDIT" },
+            { "bank_code": "090179", "name": "FAST MFB" },
+            { "bank_code": "060002", "name": "FBNQUEST MERCHANT BANK" },
+            { "bank_code": "000003", "name": "FCMB" },
+            { "bank_code": "100031", "name": "FCMB Easy Account" },
+            { "bank_code": "090409", "name": "FCMB MFB" },
+            { "bank_code": "090290", "name": "FCT MFB" },
+            { "bank_code": "090398", "name": "Federal Polytechnic Nekede Microfinance Bank" },
+            { "bank_code": "090318", "name": "FEDERAL UNIVERSITY DUTSE  MICROFINANCE BANK" },
+            { "bank_code": "090298", "name": "FEDERALPOLY NASARAWAMFB" },
+            { "bank_code": "100001", "name": "FETS" },
+            { "bank_code": "050003", "name": "FEWCHORE FINANCE COMPANY" },
+            { "bank_code": "050002", "name": "FEWCHORE FINANCE LTD" },
+            { "bank_code": "090153", "name": "FFS MICROFINANCE BANK" },
+            { "bank_code": "070026", "name": "FHA MORTGAGE BANK LTD" },
+            { "bank_code": "000007", "name": "FIDELITY BANK" },
+            { "bank_code": "100019", "name": "FIDELITY MOBILE" },
+            { "bank_code": "090126", "name": "FidFund MFB" },
+            { "bank_code": "090111", "name": "FinaTrust Microfinance Bank" },
+            { "bank_code": "090400", "name": "Finca Microfinance Bank" },
+            { "bank_code": "090366", "name": "Firmus MICROFINANCE BANK" },
+            { "bank_code": "000016", "name": "First Bank" },
+            { "bank_code": "070014", "name": "FIRST GENERATION MORTGAGE BANK" },
+            { "bank_code": "090575 ", "name": "First Midas MFB" },
+            { "bank_code": "090163", "name": "FIRST MULTIPLE MFB" },
+            { "bank_code": "090285", "name": "FIRST OPTION MFB" },
+            { "bank_code": "100014", "name": "FIRSTMONIE WALLET" },
+            { "bank_code": "090107", "name": "FirstTrust Morgages Limited" },
+            { "bank_code": "090709", "name": "FOCUS MFB" },
+            { "bank_code": "090521", "name": "FORESIGHT MICROFINANCE BANK" },
+            { "bank_code": "070002", "name": "Fortis Microfinance Bank" },
+            { "bank_code": "100016", "name": "FORTISMOBILE" },
+            { "bank_code": "400001", "name": "FSDH" },
+            { "bank_code": "090145", "name": "Full range MFB" },
+            { "bank_code": "090438", "name": "FUTMINNA MFB" },
+            { "bank_code": "090158", "name": "FUTO MFB" },
+            { "bank_code": "090582", "name": "Gabasawa MFB" },
+            { "bank_code": "090591", "name": "Gabsyn MFB" },
+            { "bank_code": "090168", "name": "Gashua Microfinance Bank" },
+            { "bank_code": "070009", "name": "GATEWAY MORTGAGE BANK" },
+            { "bank_code": "090579", "name": "GBEDE Microfinance Bank" },
+            { "bank_code": "050026", "name": "GDL Finance" },
+            { "bank_code": "090621", "name": "GIDAUNIYAR ALHERI MICROFINANCE BANK" },
+            { "bank_code": "090632", "name": "Giginya MFB" },
+            { "bank_code": "090186", "name": "Girei MFB" },
+            { "bank_code": "090441", "name": "GIWA MICROFINANCE BANK" },
+            { "bank_code": "090639", "name": "GLOBAL INITIATIVE MFB" },
+            { "bank_code": "090278", "name": "GLORY MFB " },
+            { "bank_code": "090574", "name": "GOLDMAN MICROFINANCE BANK LTD" },
+            { "bank_code": "090586", "name": "GOMBE MFB" },
+            { "bank_code": "090664", "name": "GOOD SHEPHERD MFB" },
+            { "bank_code": "090687", "name": "GOSIFECHUKWU MFB" },
+            { "bank_code": "090122", "name": "GOWANS MFB" },
+            { "bank_code": "090335", "name": "GRANTS MICROFINANCE BANK" },
+            { "bank_code": "090599", "name": "Greenacres MFB" },
+            { "bank_code": "090178", "name": "GREENBANK MFB" },
+            { "bank_code": "090269", "name": "GREENVILLE MICROFINANCE BANK" },
+            { "bank_code": "000013", "name": "GTBank" },
+            { "bank_code": "090385", "name": "GTI  Microfinance Bank" },
+            { "bank_code": "100009", "name": "GTMobile" },
+            { "bank_code": "090500", "name": "GWONG MFB" },
+            { "bank_code": "070017", "name": "HAGGAI MORTGAGE BANK" },
+            { "bank_code": "090539", "name": "HALO MFB" },
+            { "bank_code": "090121", "name": "HASAL MFB" },
+            { "bank_code": "090363", "name": "Headway MFB" },
+            { "bank_code": "100017", "name": "Hedonmark" },
+            { "bank_code": "090418", "name": "HIGHLAND MFB" },
+            { "bank_code": "090175", "name": "HighStreet MFB" },
+            { "bank_code": "090761", "name": "HILLPOST MFB" },
+            { "bank_code": "120002", "name": "Hope PSB" },
+            { "bank_code": "090598", "name": "IBA MFB" },
+            { "bank_code": "090350", "name": "ILORIN MFB" },
+            { "bank_code": "090258", "name": "IMO MICROFINANCE BANK" },
+            { "bank_code": "090417", "name": "Imowo Microfinance Bank" },
+            { "bank_code": "100024", "name": "Imperial Homes Mortgage Bank" },
+            { "bank_code": "090670", "name": "IMSU MFB" },
+            { "bank_code": "90670", "name": "IMSU MICROFINANCE BANK" },
+            { "bank_code": "090434", "name": "Insight MFB" },
+            { "bank_code": "100027", "name": "Intellifin" },
+            { "bank_code": "090386", "name": "Interland MFB" },
+            { "bank_code": "090149", "name": "IRL Microfinance Bank" },
+            { "bank_code": "090584", "name": "ISLAND MICROFINANCE BANK LTD" },
+            { "bank_code": "090353", "name": "ISUOFIA MICROFINANCE BANK" },
+            { "bank_code": "090578", "name": "IWADE MICROFINANCE BANK LTD" },
+            { "bank_code": "090570", "name": "IYAMOYE MICROFINANCE BANK LTD" },
+            { "bank_code": "090421", "name": "Izon Microfinance Bank" },
+            { "bank_code": "090003", "name": "JubileeLife" },
+            { "bank_code": "090597", "name": "KABO MICROFINANCE BANK" },
+            { "bank_code": "090320", "name": "KADPOLY MICROFINANCE BANK" },
+            { "bank_code": "090669", "name": "KADUPE MICROFINANCE BANK" },
+            { "bank_code": "090592", "name": "Kano Poly MFB" },
+            { "bank_code": "090684", "name": "KATAGUM MFB" },
+            { "bank_code": "090667", "name": "KAYI MICROFINANCE BANK" },
+            { "bank_code": "090554", "name": "KAYVEE MFB" },
+            { "bank_code": "090549", "name": "KC MFB" },
+            { "bank_code": "090191", "name": "KCMB MFB" },
+            { "bank_code": "100015", "name": "Kegow" },
+            { "bank_code": "090602", "name": "KENECHUKWU MICROFINANCE BANK" },
+            { "bank_code": "090606", "name": "KKU Microfinance Bank" },
+            { "bank_code": "100025", "name": "KONGAPAY" },
+            { "bank_code": "090299", "name": "KONTAGORA MFB" },
+            { "bank_code": "090617", "name": "Kopo Kope MFB" },
+            { "bank_code": "090380", "name": "KREDI MONEY MFB" },
+            { "bank_code": "090267", "name": "KUDA MICROFINANCE BANK" },
+            { "bank_code": "090450", "name": "KWASU MFB" },
+            { "bank_code": "090422", "name": "LANDGOLD MFB" },
+            { "bank_code": "090177", "name": "Lapo MFB" },
+            { "bank_code": "090271", "name": "Lavender Microfinance bank" },
+            { "bank_code": "090724", "name": "LAWYERS MFB" },
+            { "bank_code": "070012", "name": "LBIC MORTGAGE BANK" },
+            { "bank_code": "090650", "name": "Leadcity MFB" },
+            { "bank_code": "090372", "name": "LEGEND MFB" },
+            { "bank_code": "090420", "name": "LETSHEGO MFB" },
+            { "bank_code": "090731", "name": "LEVITE MFB" },
+            { "bank_code": "090557", "name": "LIFEGATE MFB" },
+            { "bank_code": "090620", "name": "LOMA MICROFINANCE BANK" },
+            { "bank_code": "90265", "name": "LOVONUS MFB" },
+            { "bank_code": "090265", "name": "LOVONUS MICROFINANCE BANK" },
+            { "bank_code": "050015", "name": "Lukefield Finance Company Limited" },
+            { "bank_code": "090685", "name": "M&M MFB" },
+            { "bank_code": "100035", "name": "M36" },
+            { "bank_code": "090764", "name": "MAAL MFB" },
+            { "bank_code": "090623", "name": "Mab Allianz MFB" },
+            { "bank_code": "090630", "name": "Mabinas MFB" },
+            { "bank_code": "090603", "name": "Macrod MFB" },
+            { "bank_code": "090605", "name": "MADOBI MFB" },
+            { "bank_code": "090323", "name": "MAINLAND MICROFINANCE BANK" },
+            { "bank_code": "090171", "name": "Mainstreet MFB" },
+            { "bank_code": "090174", "name": "MALACHY MFB" },
+            { "bank_code": "090383", "name": "MANNY MICROFINANCE BANK" },
+            { "bank_code": "090410", "name": "Maritime Microfinance Bank" },
+            { "bank_code": "090423", "name": "MAUTECH MFB" },
+            { "bank_code": "070019", "name": "MayFresh Mortgage Bank" },
+            { "bank_code": "090612", "name": "Medef MFB" },
+            { "bank_code": "090280", "name": "MEGAPRAISE MICROFINANCE BANK" },
+            { "bank_code": "090432", "name": "Memphis MFB" },
+            { "bank_code": "090589", "name": "MERCURY MICROFINANCE BANK" },
+            { "bank_code": "090659", "name": "MICHAEL OKPARA UNIAGRIC MFB" },
+            { "bank_code": "090587", "name": "Microbiz MFB" },
+            { "bank_code": "090113", "name": "MICROVIS MICROFINANCE BANK" },
+            { "bank_code": "090192", "name": "Midland MFB" },
+            { "bank_code": "090152", "name": "Nargata MFB" },
+            { "bank_code": "090263", "name": "NAVY MICROFINANCE BANK" },
+            { "bank_code": "090679", "name": "NDDC MICROFINANCE BANK" },
+            { "bank_code": "090128", "name": "Ndiorah MFB" },
+            { "bank_code": "090329", "name": "NEPTUNE MICROFINANCE BANK" },
+            { "bank_code": "090675", "name": "NET MFB" },
+            { "bank_code": "090108", "name": "New Prudential Bank" },
+            { "bank_code": "090205", "name": "NEWDAWN MICROFINANCE BANK" },
+            { "bank_code": "030001", "name": "NEXIM Bank" },
+            { "bank_code": "090459", "name": "NICE MFB" },
+            { "bank_code": "090505", "name": "NIGERIAN PRISONS MFB" },
+            { "bank_code": "090194", "name": "NIRSAL NATIONAL MICROFINANCE BANK" },
+            { "bank_code": "090645", "name": "Nombank MFB" },
+            { "bank_code": "060003", "name": "NOVA Bank" },
+            { "bank_code": "090734", "name": "NOVUS MFB" },
+            { "bank_code": "100032", "name": "NOWNOW DIGITAL SYSTEMS" },
+            { "bank_code": "070001", "name": "NPF MICROFINANCE BANK" },
+            { "bank_code": "090628", "name": "Nsehe Microfinance Bank" },
+            { "bank_code": "090491", "name": "NSUK MFB LTD" },
+            { "bank_code": "090676", "name": "NUGGETS MFB" },
+            { "bank_code": "090364", "name": "NUTURE MFB" },
+            { "bank_code": "090399", "name": "Nwannegadi MFB" },
+            { "bank_code": "090437", "name": "OakLand MFB" },
+            { "bank_code": "090345", "name": "OAU MICROFINANCE BANK LTD" },
+            { "bank_code": "090755", "name": "OBELEDU MFB" },
+            { "bank_code": "90576", "name": "OCTOPUS MFB" },
+            { "bank_code": "090576", "name": "OCTOPUS MICROFINANCE BANK LTD" },
+            { "bank_code": "090654", "name": "Odoakpu MFB" },
+            { "bank_code": "090119", "name": "OHAFIA MFB" },
+            { "bank_code": "090626", "name": "OHHA Microfinance Bank" },
+            { "bank_code": "090567", "name": "OK MICROFINANCE BANK" },
+            { "bank_code": "090646", "name": "Okengwe MFB" },
+            { "bank_code": "090348", "name": "OKO MFB" },
+            { "bank_code": "090161", "name": "Okpoga MFB" },
+            { "bank_code": "090752", "name": "OKWO-OHA MFB" },
+            { "bank_code": "090272", "name": "OLABISI ONABANJO UNIVERSITY MICROFINANCE BANK" },
+            { "bank_code": "090696", "name": "OLIVE MFB" },
+            { "bank_code": "090700", "name": "OMAK MFB" },
+            { "bank_code": "070007", "name": "Omoluabi Mortgage Bank Plc" },
+            { "bank_code": "100004", "name": "Opay" },
+            { "bank_code": "000036", "name": "OPTIMUS BANK" },
+            { "bank_code": "090492", "name": "ORAUKWU MFB" },
+            { "bank_code": "090588", "name": "Orisun MFB" },
+            { "bank_code": "090460", "name": "ORITABASORUN MFB" },
+            { "bank_code": "090396", "name": "Oscotech MFB" },
+            { "bank_code": "090456", "name": "OSPOLY MFB" },
+            { "bank_code": "090580", "name": "OTECH MICROFINANCE BANK LTD" },
+            { "bank_code": "090542", "name": "OTUO MICROFINANCE BANK" },
+            { "bank_code": "090767", "name": "OURPASS MFB" },
+            { "bank_code": "090635", "name": "Oyan Microfinance Bank" },
+            { "bank_code": "100002", "name": "PAGA" },
+            { "bank_code": "070008", "name": "PAGE FINANCIALS" },
+            { "bank_code": "100033", "name": "PALMPAY" },
+            { "bank_code": "000030", "name": "Parallex Bank" },
+            { "bank_code": "090390", "name": "PARKWAY MFB" },
+            { "bank_code": "100003", "name": "PARKWAY-READYCASH" },
+            { "bank_code": "090004", "name": "PARRALEX" },
+            { "bank_code": "090680", "name": "PATHFINDER MFB LIMITED" },
+            { "bank_code": "090317", "name": "PATRICK GOLD" },
+            { "bank_code": "090274", "name": "PRESTIGE MICROFINANCE BANK" },
+            { "bank_code": "090495", "name": "PROSPA CAPITAL MFB" },
+            { "bank_code": "090689", "name": "PROSPECTS MFB" },
+            { "bank_code": "090642", "name": "Prosperity Microfinance Bank" },
+            { "bank_code": "000023", "name": "PROVIDUS BANK " },
+            { "bank_code": "090690", "name": "PRUDENT MFB" },
+            { "bank_code": "090303", "name": "PURPLEMONEY MFB" },
+            { "bank_code": "090657", "name": "PYRAMID MFB" },
+            { "bank_code": "090569", "name": "QUBE MICROFINANCE BANK LTD" },
+            { "bank_code": "090261", "name": "QUICKFUND MICROFINANCE BANK" },
+            { "bank_code": "090170", "name": "Rahama MFB" },
+            { "bank_code": "090496", "name": "RANDALPHA MFB" },
+            { "bank_code": "090616", "name": "RAYYAN MFB" },
+            { "bank_code": "090125", "name": "REGENT MFB" },
+            { "bank_code": "090463", "name": "REHOBOTH MFB" },
+            { "bank_code": "090173", "name": "Reliance MFB" },
+            { "bank_code": "090198", "name": "RENMONEY MICROFINANCE BANK" },
+            { "bank_code": "090766", "name": "RETRUST MFB" },
+            { "bank_code": "090666", "name": "REVELATION MFB" },
+            { "bank_code": "090449", "name": "REX MFB" },
+            { "bank_code": "110046", "name": "REXEL" },
+            { "bank_code": "090720", "name": "RIC MFB" },
+            { "bank_code": "090132", "name": "RICHWAY MFB" },
+            { "bank_code": "090433", "name": "RIGO MFB" },
+            { "bank_code": "090547", "name": "ROCKSHIELD MFB" },
+            { "bank_code": "090622", "name": "Royal Blue MFB" },
+            { "bank_code": "090138", "name": "Royal Exchange Microfinance Bank" },
+            { "bank_code": "090535", "name": "RSU MICROFINANCE BANK" },
+            { "bank_code": "090485", "name": "SAFEGATE MFB" },
+            { "bank_code": "090006", "name": "SafeTrust" },
+            { "bank_code": "090140", "name": "Sagamu Microfinance Bank" },
+            { "bank_code": "090112", "name": "Seed Capital Microfinance Bank" },
+            { "bank_code": "090369", "name": "SEEDVEST MICROFINANCE BANK" },
+            { "bank_code": "090502", "name": "SHALOM MFB" },
+            { "bank_code": "090401", "name": "Shepherd Trust Microfinance Bank" },
+            { "bank_code": "000034", "name": "Signature Bank" },
+            { "bank_code": "050008", "name": "SIMPLE FINANCE LIMITED" },
+            { "bank_code": "120004", "name": "SmartCash PSB" },
+            { "bank_code": "090573", "name": "SNOW MFB" },
+            { "bank_code": "090641", "name": "SOURCE MFB" },
+            { "bank_code": "090325", "name": "Sparkle" },
+            { "bank_code": "090436", "name": "Spectrum MFB" },
+            { "bank_code": "100007", "name": "STANBIC IBTC @EASE WALLET" },
+            { "bank_code": "000012", "name": "STANBICIBTC BANK" },
+            { "bank_code": "000021", "name": "STANDARDCHARTERED" },
+            { "bank_code": "090162", "name": "Stanford MFB" },
+            { "bank_code": "090583", "name": "STATESIDE MFB" },
+            { "bank_code": "090262", "name": "Stellas Microfinance bank" },
+            { "bank_code": "090340", "name": "STOCKCORP MFB" },
+            { "bank_code": "090302", "name": "SUNBEAM MFB" },
+            { "bank_code": "090644", "name": "SUNTOP MFB" },
+            { "bank_code": "090446", "name": "SUPPORT MFB" },
+            { "bank_code": "090757", "name": "SWIFT TRUST MFB" },
+            { "bank_code": "100023", "name": "TagPay" },
+            { "bank_code": "090638", "name": "Tangale Microfinance Bank" },
+            { "bank_code": "090593", "name": "TASUED MICROFINANCE BANK LTD" },
+            { "bank_code": "100010", "name": "TEASYMOBILE" },
+            { "bank_code": "050007", "name": "Tekla Finance Ltd" },
+            { "bank_code": "090716", "name": "TENN MFB" },
+            { "bank_code": "090373", "name": "TF MICROFINANCE BANK" },
+            { "bank_code": "090711", "name": "THE MILLENNIUM MFB" },
+            { "bank_code": "090283", "name": "THRIVE MFB" },
+            { "bank_code": "000025", "name": "TITAN TRUST BANK" },
+            { "bank_code": "090139", "name": "Visa Microfinance Bank" },
+            { "bank_code": "090590", "name": "WAYA MFB" },
+            { "bank_code": "090691", "name": "GARUN MALLAM MFB" },
+            { "bank_code": "090699", "name": "Wesley MFB" },
+            { "bank_code": "090120", "name": "WETLAND MFB" },
+            { "bank_code": "090419", "name": "WinView Bank" },
+            { "bank_code": "090631", "name": "WRA MFB" },
+            { "bank_code": "090253", "name": "Wudil Microfinance Bank" },
+            { "bank_code": "100040", "name": "Xpresswallet" },
+            { "bank_code": "090124", "name": "XSLNCE Microfinance Bank" },
+            { "bank_code": "000027", "name": "GLOBUS BANK" },
+            { "bank_code": "090252", "name": "Yobe MFB" },
+            { "bank_code": "050019", "name": "ZEDVANCE FINANCE LIMITED" },
+            { "bank_code": "100034", "name": "ZENITH EAZY WALLET" },
+            { "bank_code": "100018", "name": "ZenithMobile" },
+            { "bank_code": "090384", "name": "ZION MICROFINANCE BANK" },
+            { "bank_code": "090718", "name": "ZITRA MFB" },
+            { "bank_code": "100022", "name": "GoMoney" },
+            { "bank_code": "060004", "name": "GREENWICH Merchant Bank" },
+            { "bank_code": "090195", "name": "GROOMING MICROFINANCE BANK" },
+            { "bank_code": "090147", "name": "HACKMAN MICROFINANCE BANK" },
+            { "bank_code": "090118", "name": "IBILE Microfinance Bank" },
+            { "bank_code": "090157", "name": "INFINITY MFB" },
+            { "bank_code": "070016", "name": "INFINITY TRUST  MORTGAGE BANK" },
+            { "bank_code": "090701", "name": "ISUA MFB" },
+            { "bank_code": "000006", "name": "JAIZ BANK" },
+            { "bank_code": "000002", "name": "KEYSTONE BANK" },
+            { "bank_code": "090480", "name": "KOLOMONI MFB" },
+            { "bank_code": "090435", "name": "LINKS MFB" },
+            { "bank_code": "000029", "name": "LOTUS BANK" },
+            { "bank_code": "070013", "name": "PLATINUM MORTGAGE BANK" },
+            { "bank_code": "000008", "name": "POLARIS BANK" },
+            { "bank_code": "000024", "name": "RAND MERCHANT BANK" },
+            { "bank_code": "070011", "name": "Refuge Mortgage Bank" },
+            { "bank_code": "090322", "name": "REPHIDIM MICROFINANCE BANK" },
+            { "bank_code": "090286", "name": "Safe Haven MFB" },
+            { "bank_code": "070022", "name": "STB Mortgage Bank" },
+            { "bank_code": "000001", "name": "STERLING BANK" },
+            { "bank_code": "000022", "name": "SUNTRUST BANK" },
+            { "bank_code": "000026", "name": "TAJ BANK" },
+            { "bank_code": "090426", "name": "TANGERINE MONEY" },
+            { "bank_code": "090708", "name": "Transpay MFB" },
+            { "bank_code": "090706", "name": "UCEE MFB" },
+            { "bank_code": "090193", "name": "Unical MFB" },
+            { "bank_code": "000011", "name": "UNITY BANK" },
+            { "bank_code": "050020", "name": "VALE FINANCE LIMITED" },
+            { "bank_code": "000017", "name": "WEMA BANK" },
+            { "bank_code": "090142", "name": "YES MFB" },
+            { "bank_code": "000015", "name": "Zenith Bank" }
+        ];
+
+        const narrations = ["Food", "House Expense", "Fridge Repair", "Logistics", "Server Maintenance", "Office Supplies", "Miscellaneous"];
+
         const showToast = (msg, isError = false) => {
             Toastify({
                 text: msg,
@@ -312,11 +1225,32 @@
                 close: false,
                 gravity: "top",
                 position: "right",
-                style: {
-                    borderLeft: `4px solid ${isError ? '#f43f5e' : '#10b981'}`
-                }
+                style: { borderLeft: `4px solid ${isError ? '#f43f5e' : '#10b981'}` }
             }).showToast();
         };
+
+        const setPanelLoading = (panelId, isLoading) => {
+            const panel = document.getElementById(panelId);
+            if (isLoading) panel.classList.add('loading');
+            else panel.classList.remove('loading');
+
+            const btn = panel.querySelector('button.primary, button.danger');
+            if (btn) {
+                btn.disabled = isLoading;
+                const spinner = btn.querySelector('.spinner');
+                if (spinner) spinner.style.display = isLoading ? 'inline-block' : 'none';
+            }
+        };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            const activeBtn = document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            if (activeTab) activeTab.classList.add('active');
+        }
 
         const updateStatus = (isConnected) => {
             const badge = document.getElementById('status-badge');
@@ -330,11 +1264,11 @@
                 dot.style.backgroundColor = 'var(--success-color)';
                 dot.style.boxShadow = '0 0 8px var(--success-color)';
                 text.innerText = 'Connected';
-                
+
                 const token = localStorage.getItem('access_token');
                 if (token) {
                     tokenCard.style.display = 'flex';
-                    tokenDisplay.innerText = `${token.substring(0, 5)}...${token.substring(token.length - 3)}`;
+                    tokenDisplay.innerText = `${token.substring(0, 10)}...${token.substring(token.length - 10)}`;
                 }
             } else {
                 badge.className = 'status-badge disconnected';
@@ -345,140 +1279,237 @@
             }
         };
 
-        // Check for existing token
-        if (localStorage.getItem('access_token')) {
-            updateStatus(true);
-        }
+        // Populate selects
+        const balanceSelect = document.getElementById('balance_account_select');
+        const buddySourceSelect = document.getElementById('buddy_source_select');
+        const extSourceSelect = document.getElementById('ext_source_select');
+        const bankSelect = document.getElementById('ext_bank_select');
+        const bankSearch = document.getElementById('bank_search');
 
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('auth-btn');
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            btn.disabled = true;
-            btn.innerText = 'Initializing...';
-
-            try {
-                const res = await axios.post(`${API_BASE}/user/login/create/`, {
-                    device_type: 'MOBILE',
-                    version: '1.0.0',
-                    email,
-                    password
-                });
-                
-                localStorage.setItem('access_token', res.data.access);
-                updateStatus(true);
-                showToast('Sequence Authenticated');
-            } catch (err) {
-                const msg = err.response?.data?.message || err.response?.data?.detail || 'Auth Failure';
-                showToast(msg, true);
-                updateStatus(false);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = '⚡ Link Session';
+        accounts.forEach(acc => {
+            const opt = new Option(acc.email, acc.id);
+            balanceSelect.add(opt);
+            if (acc.isMain) {
+                const optMain = new Option(acc.email, acc.id);
+                buddySourceSelect.add(optMain);
+                buddySourceSelect.value = acc.id;
+            }
+            if (acc.canTransferOut) {
+                const optExt = new Option(acc.email, acc.id);
+                extSourceSelect.add(optExt);
             }
         });
 
-        const handleAction = async (suspendValue) => {
-            const token = localStorage.getItem('access_token');
-            const userId = document.getElementById('user_id').value;
-            const btn = suspendValue ? document.getElementById('suspend-btn') : document.getElementById('unsuspend-btn');
-
-            if (!token) { return showToast('Initiate Admin Auth first', true); }
-            if (!userId) { return showToast('Target User ID required', true); }
-
-            const originalText = btn.innerText;
-            btn.disabled = true;
-            btn.innerText = 'Executing...';
-
-            try {
-                const res = await axios.post(`${API_BASE}/agency/others_suspend_user/`, {
-                    user_id: parseInt(userId),
-                    suspend: suspendValue,
-                    suspend_or_unsuspend_reason: '.'
-                }, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
-                // ONLY show what the server responds with
-                const msg = res.data?.message || res.data || (suspendValue ? 'User Suspended' : 'Access Restored');
-                showToast(msg);
-            } catch (err) {
-                if (err.response?.status === 401) {
-                    showToast('Session Expired', true);
-                    localStorage.removeItem('access_token');
-                    updateStatus(false);
-                } else {
-                    const msg = err.response?.data?.message || err.response?.data?.detail || 'Action Aborted';
-                    showToast(msg, true);
-                }
-            } finally {
-                btn.disabled = false;
-                btn.innerText = originalText;
+        function populateBanks(list) {
+            const currentVal = bankSelect.value;
+            bankSelect.innerHTML = '<option value="">Select Institution...</option>';
+            list.sort((a, b) => a.name.localeCompare(b.name)).forEach(bank => {
+                bankSelect.add(new Option(bank.name, bank.bank_code));
+            });
+            if ([...bankSelect.options].some(o => o.value === currentVal)) {
+                bankSelect.value = currentVal;
             }
+        }
+        populateBanks(banklist);
+
+        bankSearch.oninput = (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = banklist.filter(b => b.name.toLowerCase().includes(term));
+            populateBanks(filtered);
         };
 
-        document.getElementById('suspend-btn').addEventListener('click', () => handleAction(true));
-        document.getElementById('unsuspend-btn').addEventListener('click', () => handleAction(false));
+        // 1. Auth Flow
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            setPanelLoading('panel-auth', true);
+            try {
+                const res = await axios.post(`${API_BASE}/user/login/create/`, {
+                    device_type: 'MOBILE', version: '1.0.0',
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value
+                });
+                localStorage.setItem('access_token', res.data.access);
+                updateStatus(true);
+                showToast('Authentication Successful');
+            } catch (err) {
+                showToast(err.response?.data?.message || 'Auth Failure', true);
+                updateStatus(false);
+            } finally {
+                setPanelLoading('panel-auth', false);
+            }
+        });
 
-        // Audit Logic
-        document.getElementById('audit-btn').addEventListener('click', async () => {
+        // 2. Control Flow
+        const handleControlAction = async (suspend) => {
+            const token = localStorage.getItem('access_token');
+            const userId = document.getElementById('user_id').value;
+            if (!token) return showToast('Session required', true);
+            if (!userId) return showToast('User ID required', true);
+
+            setPanelLoading('panel-control', true);
+            try {
+                const res = await axios.post(`${API_BASE}/agency/others_suspend_user/`, {
+                    user_id: parseInt(userId), suspend, suspend_or_unsuspend_reason: '.'
+                }, { headers: { Authorization: `Bearer ${token}` } });
+                showToast(res.data?.message || 'Success');
+            } catch (err) {
+                showToast(err.response?.data?.message || 'Action Failed', true);
+            } finally {
+                setPanelLoading('panel-control', false);
+            }
+        };
+        document.getElementById('suspend-btn').onclick = () => handleControlAction(true);
+        document.getElementById('unsuspend-btn').onclick = () => handleControlAction(false);
+
+        // 3. Audit Flow
+        document.getElementById('audit-btn').onclick = async () => {
             const email = document.getElementById('audit_email').value;
-            const btn = document.getElementById('audit-btn');
-            const resultArea = document.getElementById('audit-result');
-            const historyArea = document.getElementById('tx-history');
-
-            if (!email) return showToast('Email required for audit', true);
-
-            btn.disabled = true;
-            btn.innerText = 'SCANNING...';
-
+            if (!email) return showToast('Email required', true);
+            setPanelLoading('panel-audit', true);
             try {
                 const res = await axios.get(`${API_BASE}/accounts/check-transaction?email=${encodeURIComponent(email)}`);
                 const txs = res.data?.transaction || [];
-
                 if (txs.length > 0) {
                     const latest = txs[0];
-                    document.getElementById('balance-display').innerText = `₦${latest.balance_after.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-                    document.getElementById('tx-type').innerText = `${latest.entry} — ${latest.transaction_type.replace(/_/g, ' ')}`;
+                    document.getElementById('balance-display').innerText = `₦${latest.balance_after.toLocaleString()}`;
+                    document.getElementById('tx-type').innerText = `${latest.entry} — ${latest.transaction_type}`;
                     document.getElementById('tx-amount').innerText = `${latest.entry === 'CREDIT' ? '+' : '-'}₦${latest.amount.toLocaleString()}`;
                     document.getElementById('tx-amount').style.color = latest.entry === 'CREDIT' ? 'var(--success-color)' : 'var(--error-color)';
                     document.getElementById('tx-narration').innerText = `"${latest.narration}"`;
-                    
-                    // History
-                    historyArea.innerHTML = '';
-                    txs.slice(1).forEach(tx => {
-                        const row = document.createElement('div');
-                        row.style.cssText = 'background: var(--surface-2); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;';
-                        row.innerHTML = `
-                            <div>
-                                <p style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">${tx.transaction_type.replace(/_/g, ' ')}</p>
-                                <p style="font-size: 0.65rem; color: var(--text-dim);">${new Date(tx.date_created).toLocaleString()}</p>
-                            </div>
-                            <div style="text-align: right;">
-                                <p style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: ${tx.entry === 'CREDIT' ? 'var(--success-color)' : 'var(--error-color)'}">
-                                    ${tx.entry === 'CREDIT' ? '+' : '-'}₦${tx.amount.toLocaleString()}
-                                </p>
-                                <p style="font-size: 0.65rem; color: var(--text-dim);">Bal: ₦${tx.balance_after.toLocaleString()}</p>
-                            </div>
-                        `;
-                        historyArea.appendChild(row);
-                    });
 
-                    resultArea.style.display = 'flex';
-                    showToast('Ledger Scan Complete');
-                } else {
-                    showToast('No transactions found', true);
-                    resultArea.style.display = 'none';
+                    const history = document.getElementById('tx-history');
+                    history.innerHTML = '';
+                    txs.slice(1, 10).forEach(tx => {
+                        const row = document.createElement('div');
+                        row.style.cssText = 'background: var(--surface-2); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; font-size: 0.75rem;';
+                        row.innerHTML = `<div><p>${tx.transaction_type}</p><p style="color:var(--text-dim)">${new Date(tx.date_created).toLocaleDateString()}</p></div><div style="text-align:right"><p style="color:${tx.entry === 'CREDIT' ? 'var(--success-color)' : 'var(--error-color)'}">${tx.entry === 'CREDIT' ? '+' : '-'}₦${tx.amount.toLocaleString()}</p></div>`;
+                        history.appendChild(row);
+                    });
+                    document.getElementById('audit-result').style.display = 'flex';
                 }
-            } catch (err) {
-                showToast('Audit Failed', true);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = '⚡ SCAN LEDGER';
-            }
-        });
+            } catch (err) { showToast('Audit Failed', true); }
+            finally { setPanelLoading('panel-audit', false); }
+        };
+
+        // 4. Accounts: Check Balance
+        document.getElementById('check-balance-btn').onclick = async () => {
+            const accId = balanceSelect.value;
+            const acc = accounts.find(a => a.id === accId);
+            setPanelLoading('panel-check-balance', true);
+            try {
+                const login = await axios.post(`${API_BASE}/user/login/create/`, {
+                    email: acc.email, password: acc.passcode, device_type: 'MOBILE', version: '1.0.0'
+                });
+                const bal = await axios.get(`${API_BASE}/send/wallet-balances`, { headers: { Authorization: `Bearer ${login.data.access}` } });
+                document.getElementById('acc-balance-display').innerText = `₦${bal.data.withdrawable_balance.toLocaleString()}`;
+                document.getElementById('balance_query_result').style.display = 'block';
+            } catch (err) { showToast('Query Failed', true); }
+            finally { setPanelLoading('panel-check-balance', false); }
+        };
+
+        // 5. Accounts: Send Buddy
+        const buddyList = document.getElementById('buddy-receivers-list');
+        document.getElementById('add-buddy-item-btn').onclick = () => {
+            const div = document.createElement('div');
+            div.className = 'buddy-item';
+            const sel = document.createElement('select');
+            sel.className = 'mono';
+            accounts.filter(a => a.isBuddyReceiver).forEach(a => sel.add(new Option(a.email, a.phone)));
+            const inp = document.createElement('input');
+            inp.type = 'number'; inp.placeholder = 'Amount'; inp.className = 'mono';
+            const rem = document.createElement('button');
+            rem.className = 'outline remove-btn'; rem.innerText = '×';
+            rem.onclick = () => div.remove();
+            div.append(sel, inp, rem);
+            buddyList.append(div);
+        };
+
+        document.getElementById('send-buddy-btn').onclick = async () => {
+            const mainAcc = accounts.find(a => a.isMain);
+            const data = [];
+            buddyList.querySelectorAll('.buddy-item').forEach(item => {
+                const phone = item.querySelector('select').value;
+                const amount = item.querySelector('input').value;
+                if (phone && amount) data.push({ buddy_phone_number: phone, amount: parseFloat(amount), narration: "LOTTO_WINNING_WITHDRAWAL", is_beneficiary: false, save_beneficiary: false, is_recurring: false, remove_beneficiary: false });
+            });
+            if (data.length === 0) return showToast('No receivers', true);
+            setPanelLoading('panel-buddy', true);
+            try {
+                const login = await axios.post(`${API_BASE}/user/login/create/`, {
+                    email: mainAcc.email, password: mainAcc.passcode, device_type: 'MOBILE', version: '1.0.0'
+                });
+                await axios.post(`${API_BASE}/send/send_money_paybuddy/`, {
+                    from_wallet_type: "COLLECTION", to_wallet_type: "COLLECTION", data, transaction_pin: mainAcc.pin
+                }, { headers: { Authorization: `Bearer ${login.data.access}` } });
+                showToast('Distribution Successful');
+                buddyList.innerHTML = '';
+            } catch (err) { showToast('Transfer Failed', true); }
+            finally { setPanelLoading('panel-buddy', false); }
+        };
+
+        // 6. Accounts: Send External
+        let extAccessToken = null;
+        let resolvedAccountName = "";
+
+        extSourceSelect.onchange = () => { extAccessToken = null; document.getElementById('send-ext-btn').disabled = true; };
+
+        document.getElementById('ext_account_number').oninput = async (e) => {
+            const num = e.target.value;
+            const bank = bankSelect.value;
+            const sourceAcc = accounts.find(a => a.id === extSourceSelect.value);
+            const nameEl = document.getElementById('resolved_account_name');
+            const sendBtn = document.getElementById('send-ext-btn');
+
+            if (num.length === 10 && bank) {
+                nameEl.innerText = "Resolving...";
+                try {
+                    if (!extAccessToken) {
+                        const login = await axios.post(`${API_BASE}/user/login/create/`, {
+                            email: sourceAcc.email, password: sourceAcc.passcode, device_type: 'MOBILE', version: '1.0.0'
+                        });
+                        extAccessToken = login.data.access;
+                    }
+                    const resolve = await axios.post(`${API_BASE}/send/fetch_account_name/`, {
+                        account_number: num, bank_code: bank
+                    }, { headers: { Authorization: `Bearer ${extAccessToken}` } });
+                    resolvedAccountName = resolve.data.data.account_name || "Unknown Account";
+                    nameEl.innerText = resolvedAccountName;
+                    sendBtn.disabled = false;
+                } catch (err) { nameEl.innerText = "Failed to resolve"; sendBtn.disabled = true; }
+            } else { nameEl.innerText = ""; sendBtn.disabled = true; }
+        };
+
+        document.getElementById('send-ext-btn').onclick = async () => {
+            const sourceAcc = accounts.find(a => a.id === extSourceSelect.value);
+            const amount = document.getElementById('ext_amount').value;
+            const bank = bankSelect.value;
+            const bankName = bankSelect.options[bankSelect.selectedIndex].text;
+            const num = document.getElementById('ext_account_number').value;
+
+            if (!amount || !resolvedAccountName) return;
+
+            setPanelLoading('panel-external', true);
+            try {
+                await axios.post(`${API_BASE}/send/send_money_bank_account/`, {
+                    data: [{
+                        account_number: num, account_name: resolvedAccountName,
+                        bank_code: bank, bank_name: bankName, amount: parseFloat(amount),
+                        narration: narrations[Math.floor(Math.random() * narrations.length)],
+                        is_beneficiary: false, save_beneficiary: false, is_recurring: false, remove_beneficiary: false
+                    }],
+                    transaction_pin: sourceAcc.pin
+                }, { headers: { Authorization: `Bearer ${extAccessToken}` } });
+                showToast('Transfer Sent');
+                document.getElementById('ext_amount').value = '';
+                document.getElementById('ext_account_number').value = '';
+                document.getElementById('resolved_account_name').innerText = '';
+                document.getElementById('send-ext-btn').disabled = true;
+            } catch (err) { showToast('Transfer Failed', true); }
+            finally { setPanelLoading('panel-external', false); }
+        };
+
+        if (localStorage.getItem('access_token')) updateStatus(true);
     </script>
 </body>
+
 </html>
