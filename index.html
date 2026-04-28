@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mission Control mv</title>
+    <title>LibertyPay | Mission Control</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
@@ -1426,25 +1426,27 @@
 
         document.getElementById('send-buddy-btn').onclick = async () => {
             const mainAcc = accounts.find(a => a.isMain);
-            const data = [];
-            buddyList.querySelectorAll('.buddy-item').forEach(item => {
+            let data = [];
+            const login = await axios.post(`${API_BASE}/user/login/create/`, {
+                email: mainAcc.email, password: mainAcc.passcode, device_type: 'MOBILE', version: '1.0.0'
+            });
+            buddyList.querySelectorAll('.buddy-item').forEach(async (item) => {
                 const phone = item.querySelector('select').value;
                 const amount = item.querySelector('input').value;
-                if (phone && amount) data.push({ buddy_phone_number: phone, amount: parseFloat(amount), narration: "LOTTO_WINNING_WITHDRAWAL", is_beneficiary: false, save_beneficiary: false, is_recurring: false, remove_beneficiary: false });
+                if (phone && amount) data = [{ buddy_phone_number: phone, amount: parseFloat(amount), narration: "LOTTO_WINNING_WITHDRAWAL", is_beneficiary: false, save_beneficiary: false, is_recurring: false, remove_beneficiary: false }];
+                if (data.length === 0) return showToast('No receivers', true);
+                setPanelLoading('panel-buddy', true);
+                try {
+
+                    await axios.post(`${API_BASE}/send/send_money_paybuddy/`, {
+                        from_wallet_type: "COLLECTION", to_wallet_type: "COLLECTION", data, transaction_pin: mainAcc.pin
+                    }, { headers: { Authorization: `Bearer ${login.data.access}` } });
+                    showToast('Distribution Successful for ' + phone);
+                    buddyList.innerHTML = '';
+                } catch (err) { showToast('Transfer Failed', true); }
+                finally { setPanelLoading('panel-buddy', false); }
             });
-            if (data.length === 0) return showToast('No receivers', true);
-            setPanelLoading('panel-buddy', true);
-            try {
-                const login = await axios.post(`${API_BASE}/user/login/create/`, {
-                    email: mainAcc.email, password: mainAcc.passcode, device_type: 'MOBILE', version: '1.0.0'
-                });
-                await axios.post(`${API_BASE}/send/send_money_paybuddy/`, {
-                    from_wallet_type: "COLLECTION", to_wallet_type: "COLLECTION", data, transaction_pin: mainAcc.pin
-                }, { headers: { Authorization: `Bearer ${login.data.access}` } });
-                showToast('Distribution Successful');
-                buddyList.innerHTML = '';
-            } catch (err) { showToast('Transfer Failed', true); }
-            finally { setPanelLoading('panel-buddy', false); }
+
         };
 
         // 6. Accounts: Send External
